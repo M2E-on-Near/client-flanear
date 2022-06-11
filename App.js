@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text } from 'react-native';
-import { Pedometer } from "expo-sensors";
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -21,7 +18,7 @@ const Tabs = createBottomTabNavigator();
 
 function App() {
 
-  let [fontsLoaded] = useFonts({
+  const [fontsLoaded] = useFonts({
     Inter_400Regular,
     Inter_600SemiBold,
     Inter_700Bold
@@ -31,7 +28,8 @@ function App() {
 
   useEffect(() => {
     const bootstrap = async () => {
-      let loginStatus = await SecureStore.getItemAsync("logged");
+      // await SecureStore.setItemAsync("logged", "false");
+      const loginStatus = await SecureStore.getItemAsync("logged");
       if (loginStatus === "true")
         setIsLoggedIn(true);
     };
@@ -44,7 +42,7 @@ function App() {
   }
 
   if (!isLoggedIn) {
-    return <Auth />
+    return <Auth setIsLoggedIn={setIsLoggedIn} />
   }
   else {
     return (
@@ -55,7 +53,7 @@ function App() {
             screenOptions={({ route }) => ({
               tabBarIcon: ({ focused, color, size }) => {
                 let iconName;
-                let rn = route.name;
+                const rn = route.name;
     
                 if (rn === "Mint") {
                   iconName = focused ? "home" : "home-outline"

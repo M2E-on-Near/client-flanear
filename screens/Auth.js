@@ -1,15 +1,20 @@
-import React from "react";
+import React, {useState} from "react";
 import { Pressable, View, StyleSheet, Text } from "react-native";
 import * as SecureStore from "expo-secure-store";
+import {WebView} from "react-native-webview";
 
-async function enter() {
-    await SecureStore.setItemAsync("logged", "true");
-}
+export default function Auth({setIsLoggedIn}) {
+    const [showWebView, setShowWebView] = useState(false);
 
-export default function Auth() {
+    async function enter() {
+        setShowWebView(false);
+        await SecureStore.setItemAsync("logged", "true");
+        setIsLoggedIn(true);
+    }
 
     return (
         <View style={styles.container}>
+        {!showWebView ? <>
             <View style={{ alignItems: "center" }}>
                 <Text style={styles.header}>Welcome to Flanears!</Text>
                 <Text style={styles.underHeader}>Connect your wallet to begin</Text>
@@ -28,7 +33,19 @@ export default function Auth() {
                 >
                     Connect Wallet
                 </Text>
-            </Pressable>
+            </Pressable></>
+        :
+            <WebView source={{uri: 'http://192.168.0.141:3000'}} style={{height: 300, width: 400}}
+                 onMessage={(event) => {
+                     if(event.nativeEvent.data === 'success') enter();
+                     // else alert(event.nativeEvent.data);
+                 }}
+                 injectedJavaScriptBeforeContentLoaded={`
+                    window.action = {action: "sign-in"};
+                    true;
+                 `}
+            />
+        }
         </View>
     );
 }
