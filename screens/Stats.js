@@ -1,10 +1,11 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { View, Text, StyleSheet, Pressable, FlatList, Image } from "react-native";
 import Foundation from "react-native-vector-icons/Foundation";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import Entypo from "react-native-vector-icons/Entypo";
+import {Pedometer} from "expo-sensors";
 
 import dummyData from "./dummy-data";
 
@@ -50,15 +51,34 @@ const Card = (props) => {
 const Stack = createNativeStackNavigator();
 
 const Home = (props) => {
+    const [steps, setSteps] = useState(0);
+    const [isPedometerAvailable, setIsPedometerAvailable] = useState(false);
+
+    useEffect(() => {
+        Pedometer.getPermissionsAsync().then(r => {
+            Pedometer.requestPermissionsAsync().then(_r => {
+                Pedometer.isAvailableAsync().then(result => {
+                    setIsPedometerAvailable(result);
+                    Pedometer.watchStepCount(_result => {
+                        setSteps(_result.steps);
+                    });
+                }, error => {
+                    console.error('Could not get isPedometerAvailable: ' + error);
+                    setIsPedometerAvailable(false);
+                });
+            })
+        });
+    }, []);
+
     return (
         <View style={styles.container}>
             <View style={styles.steps}>
-                <Text style={styles.stepCounter}>10,000</Text>
+                <Text style={styles.stepCounter}>{steps}</Text>
                 <Foundation name={"foot"} size={45} color={"#2F2B04"}/>
             </View>
             <View style={styles.income}>
                 <Text style={[styles.InterSemiBold, { fontSize: 19, color: "#A6A498" }]}>
-                    You've earned 1000 KRK today!
+                    You've earned ${steps / 1000} KRK today!
                 </Text>
             </View>
             <View style={styles.flanearPicker}>
