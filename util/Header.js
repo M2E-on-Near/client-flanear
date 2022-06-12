@@ -7,6 +7,8 @@ import React, {useState} from "react";
 
 export default function Header() {
     const [krkBalance, setKrkBalance] = useState(30);
+    const [showKrkWebView, setShowKrkWebView] = useState(true);
+    const updateKrkBalance = () => setShowKrkWebView(s => !s);
     return (
         <SafeAreaView style={{ backgroundColor: "#F3F0DF" }}>
             <View style={styles.header}>
@@ -15,7 +17,7 @@ export default function Header() {
                         source={require("../assets/KRKicon.png")}
                         style={{width: 30, height: 30, resizeMode: "stretch"}}
                     />
-                    <Text style={[styles.InterSemiBold, { fontSize: 20 }]}>{krkBalance}</Text>
+                    <Text style={[styles.InterSemiBold, { fontSize: 20 }]} onPress={updateKrkBalance}>{krkBalance}</Text>
                 </View>
                 <View style={[styles.box, { borderBottomLeftRadius: 20, borderTopLeftRadius: 20 }]}>
                     <Text style={[styles.InterSemiBold, { fontSize: 20 }]}>3</Text>
@@ -25,16 +27,15 @@ export default function Header() {
                     />
                 </View>
             </View>
-            <WebView source={{uri: 'http://flanear.github.io/bridge'}} style={{display: 'none'}}
+            {showKrkWebView &&
+            <WebView source={{uri: 'http://flanear.github.io/bridge?action=ft_balance'}} style={{display: 'none'}}
+            // <WebView source={{uri: 'http://192.168.0.141:3000?action=ft_balance'}} style={{display: 'none'}}
                      onMessage={(event) => {
                          // alert(event.nativeEvent.data);
                          setKrkBalance(event.nativeEvent.data);
                      }}
-                     injectedJavaScriptBeforeContentLoaded={`
-                    window.action = {action: "ft_balance"};
-                    true;
-                 `}
             />
+            }
         </SafeAreaView>
     );
 }
