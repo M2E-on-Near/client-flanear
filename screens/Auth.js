@@ -26,7 +26,7 @@ export default function Auth({setIsLoggedIn}) {
                     },
                     styles.walletButton
                 ]}
-                onPress={() => enter()}
+                onPress={() => setShowWebView(true)}
             >
                 <Text 
                     style={{ color: "#FFF", fontSize: 20, fontFamily: "Inter_600SemiBold" }}
@@ -35,15 +35,12 @@ export default function Auth({setIsLoggedIn}) {
                 </Text>
             </Pressable></>
         :
-            <WebView source={{uri: 'http://m2e-on-near.github.io/bridge'}} style={{height: 300, width: 400}}
+            <WebView source={{uri: 'http://flanear.github.io/bridge?action=sign-in'}} style={{height: 300, width: 400}}
+            {/*<WebView source={{uri: 'http://192.168.0.141:3000/bridge?action=sign-in'}} style={{height: 300, width: 400}}*/}
                  onMessage={(event) => {
                      if(event.nativeEvent.data === 'success') enter();
                      // else alert(event.nativeEvent.data);
                  }}
-                 injectedJavaScriptBeforeContentLoaded={`
-                    window.action = {action: "sign-in"};
-                    true;
-                 `}
             />
         }
         </View>
