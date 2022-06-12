@@ -55,7 +55,7 @@ function App() {
                 let iconName;
                 const rn = route.name;
     
-                if (rn === "Mint") {
+                if (rn === "Get") {
                   iconName = focused ? "home" : "home-outline"
                 } else if (rn === "Inventory") {
                   iconName = focused ? "cube" : "cube-outline"
