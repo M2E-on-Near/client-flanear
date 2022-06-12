@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import {WebView} from "react-native-webview";
 
-export default function Inventory() {
+export default function Play() {
     return (
         <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
             {/*TODO make it fullscreen on separate page*/}

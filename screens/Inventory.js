@@ -10,104 +10,123 @@ import dummyData from "./dummy-data.js";
 
 const ImproveButton = (props) => {
     return (
-        <Pressable 
+        <Pressable
             style={({ pressed }) => [
-                    {
-                        opacity: pressed ? 0.7 : 1.0
-                    },
-                    {
-                        width: 70,
-                        height: 30,
-                        borderRadius: 10,
-                        alignItems: "center",
-                        justifyContent: "center",
-                        backgroundColor: "#929062",
-                        marginLeft: 7
-                    }
-                ]
+                {
+                    opacity: pressed ? 0.7 : 1.0
+                },
+                {
+                    width: 70,
+                    height: 30,
+                    borderRadius: 10,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: "#929062",
+                    marginLeft: 7
+                }
+            ]
             }
         >
-            <Text style={{fontFamily: "Inter_600SemiBold", color: "#FFF"}}>Improve</Text>
+            <Text style={[ styles.InterSemiBold, { color: "#FFF" }]}>Improve</Text>
         </Pressable>
     );
 }
 
 export default function Inventory() {
 
-    const [images, setImages] = useState([]);
-    const [currentPage, setCurrentPage] = useState(0);
-    const pageRef = useRef(null);
+    if (dummyData.data.length > 0) {
+        const [images, setImages] = useState([]);
+        const [currentPage, setCurrentPage] = useState(0);
+        const pageRef = useRef(null);
 
-    useEffect(() => {
-        fetch(`https://picsum.photos/v2/list?page=${Math.ceil(Math.random() * 5)}&limit=4`)
-            .then(res => res.json())
-            .then(data => setImages(data));
-    }, []);
+        useEffect(() => {
+            fetch(`https://picsum.photos/v2/list?page=${Math.ceil(Math.random() * 5)}&limit=${dummyData.data.length}`)
+                .then(res => res.json())
+                .then(data => setImages(data));
+        }, []);
 
-    const inventoryItems = images.map((elem) =>
-        <View style={styles.page}>
-            <Image source={{ uri: elem.download_url }} style={{resizeMode: "stretch", width: "70%", height: "60%"}} />
-        </View>
-    );
+        const inventoryItems = images.map((elem) =>
+            <View style={styles.page}>
+                <Image
+                    source={{ uri: elem.download_url }}
+                    style={{resizeMode: "stretch", width: "70%", height: "60%"}}
+                />
+            </View>
+        );
 
-    function changeStats(e) {
-        setCurrentPage(e.nativeEvent.position);
-    }
+        function changeStats(e) {
+            setCurrentPage(e.nativeEvent.position);
+        }
 
-    return (
-        <View style={styles.container}>
-            <View style={{flex: 3, flexDirection: "row"}}>
-                <View style={{justifyContent: "center"}}>
-                    <SimpleLineIcons name={"arrow-left"} size={40} />
+        return (
+            <View style={styles.container}>
+                <View style={{flex: 3, flexDirection: "row"}}>
+                    <View style={{justifyContent: "center"}}>
+                        <SimpleLineIcons name={"arrow-left"} size={40} />
+                    </View>
+                    <PagerView
+                        style={styles.carousel}
+                        initialPage={0}
+                        showPageIndicator={true}
+                        onPageSelected={changeStats}
+                        ref={pageRef}
+                    >
+                        {inventoryItems}
+                    </PagerView>
+                    <View style={{justifyContent: "center"}}>
+                        <SimpleLineIcons name={"arrow-right"} size={40} />
+                    </View>
                 </View>
-                <PagerView 
-                    style={styles.carousel}
-                    initialPage={0}
-                    showPageIndicator={true}
-                    onPageSelected={changeStats}
-                    ref={pageRef}
+                <View style={styles.stats}>
+                    <View style={{ flexDirection: "row", justifyContent: "space-between", width: "90%"}}>
+                        <View style={{ flexDirection: "row", alignItems: "center" }}>
+                            <Foundation name={"foot"} size={23} color={"#2F2B04"}/>
+                            <Text style={styles.stat}>Steps per energy</Text>
+                        </View>
+                        <View style={{flexDirection: "row", alignItems: "center"}}>
+                            <Text style={styles.stat}>{dummyData.data[currentPage].stepsPerEnergy}</Text>
+                            <ImproveButton />
+                        </View>
+                    </View>
+                    <View style={{ flexDirection: "row", justifyContent: "space-between", width: "90%"}}>
+                        <View style={{ flexDirection: "row", alignItems: "center" }}>
+                            <MaterialCommunityIcons name={"cash-plus"} size={15} color={"#2F2B04"}/>
+                            <Text style={styles.stat}>Income</Text>
+                        </View>
+                        <View style={{flexDirection: "row", alignItems: "center"}}>
+                            <Text style={styles.stat}>{dummyData.data[currentPage].income}</Text>
+                            <ImproveButton />
+                        </View>
+                    </View>
+                    <View style={{ flexDirection: "row", justifyContent: "space-between", width: "90%"}}>
+                        <View style={{ flexDirection: "row", alignItems: "center" }}>
+                            <Entypo name={"back-in-time"} size={15} color={"#2F2B04"}/>
+                            <Text style={styles.stat}>Recovery time</Text>
+                        </View>
+                        <View style={{flexDirection: "row", alignItems: "center"}}>
+                            <Text style={styles.stat}>{dummyData.data[currentPage].recoveryTime} h</Text>
+                            <ImproveButton />
+                        </View>
+                    </View>
+                </View>
+            </View>
+        );
+    } else {
+        return (
+            <View style={[styles.container, { alignItems: "center", justifyContent: "center"}]}>
+                <Text
+                    style={[styles.InterSemiBold, { fontSize: 20, width: "90%", textAlign: "center", marginBottom: 20 }]}
                 >
-                    {inventoryItems}
-                </PagerView>
-                <View style={{justifyContent: "center"}}>
-                    <SimpleLineIcons name={"arrow-right"} size={40} />
-                </View>
+                    You need Flanears to start earning or battling
+                </Text>
+                <Text
+                    style={[styles.InterSemiBold, { fontSize: 20, width: "90%", textAlign: "center" }]}
+                >
+                    Please, proceed to the minting page
+                </Text>
             </View>
-            <View style={styles.stats}>
-                <View style={{ flexDirection: "row", justifyContent: "space-between", width: "90%"}}>
-                    <View style={{ flexDirection: "row", alignItems: "center" }}>
-                        <Foundation name={"foot"} size={23} color={"#2F2B04"}/>
-                        <Text style={styles.stat}>Steps per energy</Text>
-                    </View>
-                    <View style={{flexDirection: "row", alignItems: "center"}}>
-                        <Text style={styles.stat}>{dummyData.data[currentPage].stepsPerEnergy}</Text>
-                        <ImproveButton />
-                    </View>
-                </View>
-                <View style={{ flexDirection: "row", justifyContent: "space-between", width: "90%"}}>
-                    <View style={{ flexDirection: "row", alignItems: "center" }}>
-                        <MaterialCommunityIcons name={"cash-plus"} size={15} color={"#2F2B04"}/>
-                        <Text style={styles.stat}>Income</Text>
-                    </View>
-                    <View style={{flexDirection: "row", alignItems: "center"}}>
-                        <Text style={styles.stat}>{dummyData.data[currentPage].income}</Text>
-                        <ImproveButton />
-                    </View>
-                </View>
-                <View style={{ flexDirection: "row", justifyContent: "space-between", width: "90%"}}>
-                    <View style={{ flexDirection: "row", alignItems: "center" }}>
-                        
-                        <Entypo name={"back-in-time"} size={15} color={"#2F2B04"}/>
-                        <Text style={styles.stat}>Recovery time</Text>
-                    </View>
-                    <View style={{flexDirection: "row", alignItems: "center"}}>
-                        <Text style={styles.stat}>{dummyData.data[currentPage].recoveryTime} h</Text>
-                        <ImproveButton />
-                    </View>
-                </View>
-            </View>
-        </View>
-    );
+        );
+    }
 }
 
 const styles = StyleSheet.create({
@@ -135,6 +154,10 @@ const styles = StyleSheet.create({
 
     InterRegular: {
         fontFamily: "Inter_400Regular"
+    },
+
+    InterSemiBold: {
+        fontFamily: "Inter_600SemiBold"
     },
 
     stat: {
