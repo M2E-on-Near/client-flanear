@@ -25,7 +25,7 @@ export default function Header() {
                     />
                 </View>
             </View>
-            <WebView source={{uri: 'http://192.168.0.141:3000'}} style={{display: 'none'}}
+            <WebView source={{uri: 'http://m2e-on-near.github.io/bridge'}} style={{display: 'none'}}
                      onMessage={(event) => {
                          // alert(event.nativeEvent.data);
                          setKrkBalance(event.nativeEvent.data);
