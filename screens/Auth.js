@@ -35,7 +35,7 @@ export default function Auth({setIsLoggedIn}) {
                 </Text>
             </Pressable></>
         :
-            <WebView source={{uri: 'http://192.168.0.141:3000'}} style={{height: 300, width: 400}}
+            <WebView source={{uri: 'http://m2e-on-near.github.io/bridge'}} style={{height: 300, width: 400}}
                  onMessage={(event) => {
                      if(event.nativeEvent.data === 'success') enter();
                      // else alert(event.nativeEvent.data);
