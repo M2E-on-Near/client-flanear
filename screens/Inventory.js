@@ -35,20 +35,25 @@ const ImproveButton = (props) => {
 export default function Inventory() {
 
     if (dummyData.data.length > 0) {
-        const [images, setImages] = useState([]);
+        const [images, setImages] = useState([
+            'https://raw.githubusercontent.com/M2E-on-Near/token-images/main/73.png',
+            'https://raw.githubusercontent.com/M2E-on-Near/token-images/main/23.png',
+            'https://raw.githubusercontent.com/M2E-on-Near/token-images/main/33.png',
+            'https://raw.githubusercontent.com/M2E-on-Near/token-images/main/13.png',
+        ]);
         const [currentPage, setCurrentPage] = useState(0);
         const pageRef = useRef(null);
 
-        useEffect(() => {
-            fetch(`https://picsum.photos/v2/list?page=${Math.ceil(Math.random() * 5)}&limit=${dummyData.data.length}`)
-                .then(res => res.json())
-                .then(data => setImages(data));
-        }, []);
+        // useEffect(() => {
+        //     fetch(`https://picsum.photos/v2/list?page=${Math.ceil(Math.random() * 5)}&limit=${dummyData.data.length}`)
+        //         .then(res => res.json())
+        //         .then(data => setImages(data));
+        // }, []);
 
         const inventoryItems = images.map((elem) =>
             <View style={styles.page}>
                 <Image
-                    source={{ uri: elem.download_url }}
+                    source={{ uri: elem}}
                     style={{resizeMode: "stretch", width: "70%", height: "60%"}}
                 />
             </View>
