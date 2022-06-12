@@ -8,6 +8,7 @@ import Entypo from "react-native-vector-icons/Entypo";
 import {Pedometer} from "expo-sensors";
 
 import dummyData from "./dummy-data";
+import * as SecureStore from "expo-secure-store";
 
 const Card = (props) => {
     return (
@@ -55,6 +56,12 @@ const Home = (props) => {
     const [isPedometerAvailable, setIsPedometerAvailable] = useState(false);
 
     useEffect(() => {
+        SecureStore.getItemAsync("steps").then(s => {
+            const sn = parseInt(s);
+            if (sn)
+                setSteps(sn);
+        });
+
         Pedometer.getPermissionsAsync().then(r => {
             Pedometer.requestPermissionsAsync().then(_r => {
                 Pedometer.isAvailableAsync().then(result => {
@@ -69,6 +76,10 @@ const Home = (props) => {
             })
         });
     }, []);
+
+    useEffect(() => {
+        SecureStore.setItemAsync('steps', steps.toString());
+    }, [steps]);
 
     return (
         <View style={styles.container}>
