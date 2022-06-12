@@ -19,7 +19,7 @@ const MintButton = (props) => {
             ]
             }
         >
-            <Text style={{fontFamily: "Inter_600SemiBold", color: "#FFF", fontSize: 20}}>Mint</Text>
+            <Text style={{fontFamily: "Inter_600SemiBold", color: "#FFF", fontSize: 20}}>Get</Text>
         </Pressable>
     );
 }

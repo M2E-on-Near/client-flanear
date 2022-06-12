@@ -88,7 +88,7 @@ function App() {
             })
             }
           >
-            <Tabs.Screen name="Mint" component={Mint} />
+            <Tabs.Screen name="Get" component={Mint} />
             <Tabs.Screen name="Inventory" component={Inventory} />
             <Tabs.Screen name="Stats" component={Stats} />
             <Tabs.Screen name="Play" component={Play} />
